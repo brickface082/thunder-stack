@@ -52,15 +52,16 @@ echo ">>> Starting OpenClaw gateway..."
 openclaw gateway --port 18789 --allow-unconfigured &
 sleep 3
 
-# 11. Forward ports
-echo ">>> Forwarding ports..."
-tnr ports forward 0 --add 8080 --add 18789
-
 echo ""
 echo "============================================================"
 echo "✓ Setup complete!"
-echo "  Open WebUI:     https://0gvx00s1-8080.thundercompute.net"
-echo "  OpenClaw:       https://0gvx00s1-18789.thundercompute.net"
 echo "  Ollama API:     http://localhost:11434"
 echo "  Telegram bot:   @MadChatterBot"
+echo ""
+echo "  Run this on your LOCAL Ubuntu to expose ports:"
+echo "  tnr ports forward 0 --add 8080 --add 18789"
+echo ""
+echo "  Then open:"
+echo "  Open WebUI:  https://0gvx00s1-8080.thundercompute.net"
+echo "  OpenClaw:    https://0gvx00s1-18789.thundercompute.net"
 echo "============================================================"
