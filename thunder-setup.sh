@@ -1,7 +1,7 @@
 #!/bin/bash
 # ============================================================
 # Thunder Compute Setup Script
-# Installs: Ollama + Dolphin3 + Open WebUI
+# Installs: Ollama + Dolphin3 + Open WebUI + OpenClaw
 # Usage: bash thunder-setup.sh
 # ============================================================
 
@@ -34,13 +34,33 @@ echo ">>> Starting Open WebUI..."
 cd ~
 open-webui serve &
 
-# 7. Forward ports
+# 7. Install OpenClaw
+echo ">>> Installing OpenClaw..."
+curl -fsSL https://openclaw.ai/install.sh | bash
+
+# 8. Copy OpenClaw config from GitHub repo
+echo ">>> Restoring OpenClaw config..."
+git clone https://brickface082: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@github.com/brickface082/openclaw-setup.git ~/openclaw-setup-repo
+cp ~/openclaw-setup-repo/openclaw.json ~/.openclaw/openclaw.json
+
+# 9. Set Dolphin3 as primary model
+echo ">>> Setting Dolphin3 as primary model..."
+openclaw config set agents.defaults.model.primary ollama/dolphin3
+
+# 10. Start OpenClaw gateway in background
+echo ">>> Starting OpenClaw gateway..."
+openclaw gateway --port 18789 --allow-unconfigured &
+sleep 3
+
+# 11. Forward ports
 echo ">>> Forwarding ports..."
-tnr ports forward 0 --add 8080
+tnr ports forward 0 --add 8080 --add 18789
 
 echo ""
 echo "============================================================"
 echo "✓ Setup complete!"
-echo "  Open WebUI: https://0gvx00s1-8080.thundercompute.net"
-echo "  Ollama API: http://localhost:11434"
+echo "  Open WebUI:     https://0gvx00s1-8080.thundercompute.net"
+echo "  OpenClaw:       https://0gvx00s1-18789.thundercompute.net"
+echo "  Ollama API:     http://localhost:11434"
+echo "  Telegram bot:   @MadChatterBot"
 echo "============================================================"
